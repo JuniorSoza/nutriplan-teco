@@ -38,7 +38,7 @@ class MobileMenu extends StatelessWidget {
                 Text(
                   'Sistema de Gestión',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                     fontSize: 14,
                   ),
                 ),
@@ -136,9 +136,9 @@ class MobileMenu extends StatelessWidget {
               onItemSelected(item['title'] as String);
               Navigator.pop(context); // Cerrar el drawer
             },
-            tileColor: isSelected ? Colors.blue.withOpacity(0.1) : null,
+            tileColor: isSelected ? Colors.blue.withValues(alpha: 0.1) : null,
           );
-        }).toList(),
+        }),
       ],
     );
   }

@@ -51,7 +51,7 @@ class TopMenu extends StatelessWidget {
                   border: Border.all(
                     color: isSelected
                         ? Colors.blue
-                        : Colors.blue.withOpacity(0.3),
+                        : Colors.blue.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Text(

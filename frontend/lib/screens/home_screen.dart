@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/responsive_layout.dart';
 import '../widgets/top_menu.dart';
-import '../widgets/side_menu.dart';
 import '../widgets/mobile_menu.dart';
 import '../widgets/products_widget.dart';
 import '../widgets/recent_movements_widget.dart';
@@ -26,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('NutriPlan'),
-        backgroundColor: Colors.purple,
+        backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
         elevation: 2,
       ),
@@ -72,15 +71,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildTabletLayout() {
     return Row(
       children: [
-        SideMenu(
-          selectedItem: _selectedSideMenuItem,
-          onItemSelected: (item) {
-            setState(() {
-              _selectedSideMenuItem = item;
-            });
-          },
-          isTablet: true,
-        ),
         Expanded(
           child: Column(
             children: [
@@ -104,15 +94,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildDesktopLayout() {
     return Row(
       children: [
-        SideMenu(
-          selectedItem: _selectedSideMenuItem,
-          onItemSelected: (item) {
-            setState(() {
-              _selectedSideMenuItem = item;
-            });
-          },
-          isTablet: false,
-        ),
         Expanded(
           child: Column(
             children: [
