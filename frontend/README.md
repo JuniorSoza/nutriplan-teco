@@ -1,211 +1,183 @@
-# NutriPlan Frontend - Flutter App
+# NutriPlan Frontend
 
-Aplicación móvil y web para el sistema de gestión de NutriPlan desarrollada en Flutter.
+Sistema de gestión de comedor empresarial desarrollado con Flutter.
 
-## 🚀 Características
+## Descripción
 
-- **Interfaz responsiva** que se adapta a móviles, tablets y desktop
-- **Menú superior** para registro de movimientos (Desayuno, Almuerzo, Merienda, etc.)
-- **Menú lateral** para administración (Facturación, Búsqueda, Reportes, etc.)
-- **Diseño Material 3** con tema personalizado
-- **Navegación intuitiva** con indicadores visuales de selección
+NutriPlan es una aplicación Flutter responsiva que permite gestionar las operaciones de un comedor empresarial, incluyendo:
 
-## 📱 Menús Implementados
+- **Sistema de Facturación**: Registro de ventas y transacciones
+- **Búsqueda de Empleados**: Consulta de información de empleados en tiempo real
+- **Generación de Reportes**: Creación de reportes detallados con exportación a Excel y PDF
+- **Gestión de Productos**: Administración del catálogo de productos del comedor
 
-### Menú Superior (Registro de Movimientos)
-- **Inicio**: Pantalla de bienvenida
-- **Desayuno**: Registro de desayunos
-- **Almuerzo**: Registro de almuerzos
-- **Merienda**: Registro de meriendas
-- **Refrigerio**: Registro de refrigerios
-- **Extras**: Registro de extras
-- **Últimos Movimientos**: Historial de registros
+## Características
 
-### Menú Lateral (Administración)
-- **Sistema de Facturación**: Gestión de facturas
-- **Buscar Empleado**: Búsqueda de empleados
-- **Generar Reportes**: Generación de reportes
-- **Actualizar Información**: Actualización de datos
+- 🎨 **Diseño Responsivo**: Adaptable a dispositivos móviles, tablets y desktop
+- 📊 **Reportes Avanzados**: Generación de reportes con exportación a Excel y PDF
+- 🔍 **Búsqueda en Tiempo Real**: Integración con servicio web externo para consulta de empleados
+- 📱 **Interfaz Moderna**: Material Design 3 con tema personalizado
+- ⚡ **Rendimiento Optimizado**: Gestión eficiente de estado y recursos
 
-## 🎨 Diseño Responsivo
+## Tecnologías Utilizadas
 
-### Móvil (< 768px)
-- Menú superior horizontal scrolleable
-- Drawer lateral con todos los menús
-- Botón hamburguesa en AppBar
-
-### Tablet (768px - 1200px)
-- Menú superior completo
-- Menú lateral compacto (200px)
-- Layout optimizado para pantallas medianas
-
-### Desktop (> 1200px)
-- Menú superior completo
-- Menú lateral completo (250px)
-- Máximo aprovechamiento del espacio
-
-## 🛠️ Tecnologías Utilizadas
-
-- **Flutter**: Framework de desarrollo
+- **Flutter**: Framework de desarrollo multiplataforma
+- **Dart**: Lenguaje de programación
 - **Material Design 3**: Sistema de diseño
-- **Responsive Design**: Adaptación a diferentes pantallas
-- **State Management**: Gestión de estado con setState
+- **PlutoGrid**: Widget para tablas de datos
+- **HTTP**: Cliente HTTP para APIs
+- **Excel**: Exportación a formato Excel
+- **PDF**: Generación de documentos PDF
+- **File Picker**: Selección y guardado de archivos
 
-## 📦 Instalación
+## Estructura del Proyecto
 
-### Prerrequisitos
+```
+lib/
+├── config/
+│   └── app_config.dart          # Configuración de la aplicación
+├── screens/
+│   └── home_screen.dart         # Pantalla principal
+├── services/
+│   ├── api_service.dart         # Servicios de API
+│   ├── export_service.dart      # Servicios de exportación
+│   └── reportes_service.dart    # Servicios de reportes
+└── widgets/
+    ├── billing_system_widget.dart    # Widget de facturación
+    ├── employee_search_widget.dart   # Widget de búsqueda de empleados
+    ├── mobile_menu.dart              # Menú móvil
+    ├── products_widget.dart          # Widget de productos
+    ├── recent_movements_widget.dart  # Widget de movimientos recientes
+    ├── reports_widget.dart           # Widget de reportes
+    ├── responsive_layout.dart        # Layout responsivo
+    ├── side_menu.dart                # Menú lateral
+    ├── top_menu.dart                 # Menú superior
+    └── update_info_widget.dart       # Widget de actualización
+```
 
-- Flutter SDK (versión 3.0 o superior)
-- Dart SDK
-- Android Studio / VS Code
-- Emulador o dispositivo físico
+## Instalación
 
-### Pasos de Instalación
-
-1. **Clonar el repositorio**
+1. **Clonar el repositorio**:
    ```bash
    git clone <url-del-repositorio>
    cd frontend
    ```
 
-2. **Instalar dependencias**
+2. **Instalar dependencias**:
    ```bash
    flutter pub get
    ```
 
-3. **Ejecutar la aplicación**
+3. **Configurar el backend**:
+   - Asegúrate de que el backend esté ejecutándose en `http://localhost:3000`
+   - Verifica la configuración en `lib/config/app_config.dart`
+
+4. **Ejecutar la aplicación**:
    ```bash
-   # Para desarrollo
    flutter run
-
-   # Para web
-   flutter run -d chrome
-
-   # Para Android
-   flutter run -d android
-
-   # Para iOS
-   flutter run -d ios
    ```
 
-## 📁 Estructura del Proyecto
+## Configuración
 
+### Backend URL
+Edita `lib/config/app_config.dart` para configurar las URLs del backend:
+
+```dart
+class AppConfig {
+  static const String backendUrl = 'http://localhost:3000';
+  static const String webServiceUrl = 'http://ddws.tecopesca.com:8042/ws_comedor/api/colaborador';
+  // ...
+}
 ```
-lib/
-├── main.dart              # Punto de entrada de la aplicación
-├── screens/
-│   └── home_screen.dart   # Pantalla principal con navegación
-└── widgets/
-    ├── responsive_layout.dart  # Layout responsivo
-    ├── top_menu.dart          # Menú superior
-    ├── side_menu.dart         # Menú lateral
-    └── mobile_menu.dart       # Menú móvil (drawer)
+
+### Variables de Entorno
+Para desarrollo local, asegúrate de que el backend esté configurado correctamente con las variables de entorno necesarias.
+
+## Funcionalidades Principales
+
+### 1. Sistema de Facturación
+- Registro de ventas de productos
+- Búsqueda automática de empleados por código
+- Cálculo automático de precios y descuentos
+- Validación de datos en tiempo real
+
+### 2. Búsqueda de Empleados
+- Integración con servicio web externo
+- Búsqueda automática al ingresar 6 dígitos
+- Manejo robusto de errores de conexión
+- Modo offline con datos de respaldo
+
+### 3. Generación de Reportes
+- Reportes por rango de fechas
+- Reportes por empleado específico
+- Exportación a Excel y PDF
+- Visualización en tablas interactivas
+
+### 4. Gestión de Productos
+- Catálogo de productos del comedor
+- Categorización por tipos
+- Precios y disponibilidad
+
+## Dependencias Principales
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.1.0                    # Cliente HTTP
+  pluto_grid: ^8.0.0              # Tablas de datos
+  excel: ^2.1.0                   # Exportación Excel
+  pdf: ^3.10.7                    # Generación PDF
+  file_picker: ^6.1.1             # Selección de archivos
+  intl: ^0.19.0                   # Internacionalización
+  path_provider: ^2.1.2           # Acceso a archivos
 ```
 
-## 🎯 Funcionalidades por Pantalla
+## Desarrollo
 
-### Pantalla de Inicio
-- Mensaje de bienvenida
-- Instrucciones de navegación
-- Iconografía descriptiva
+### Comandos Útiles
 
-### Pantallas de Registro (Desayuno, Almuerzo, etc.)
-- Formulario de registro
-- Campos: Código de empleado, nombre, cantidad
-- Botón de guardar con confirmación
-- Validación de datos
-
-### Últimos Movimientos
-- Lista de registros recientes
-- Información: Empleado, tipo de comida, hora, cantidad
-- Diseño de tarjetas con avatares
-
-### Sistema de Facturación
-- Botones para nueva factura y búsqueda
-- Interfaz preparada para integración con backend
-
-### Búsqueda de Empleados
-- Campo de búsqueda con icono
-- Preparado para integración con API
-
-### Generación de Reportes
-- Grid de reportes disponibles
-- Reporte diario, semanal, mensual, por empleado
-- Diseño de tarjetas interactivas
-
-### Actualización de Información
-- Lista de opciones de actualización
-- Empleados, productos, precios, configuración
-- Navegación preparada para subpantallas
-
-## 🔧 Configuración
-
-### Tema de la Aplicación
-- Color primario: Azul
-- Material Design 3 habilitado
-- AppBar personalizado
-- Drawer con tema consistente
-
-### Breakpoints Responsivos
-- **Móvil**: < 768px
-- **Tablet**: 768px - 1200px
-- **Desktop**: > 1200px
-
-## 🚀 Próximas Funcionalidades
-
-- [ ] Integración con API backend
-- [ ] Autenticación de usuarios
-- [ ] Persistencia local de datos
-- [ ] Notificaciones push
-- [ ] Modo offline
-- [ ] Exportación de reportes
-- [ ] Escáner de códigos QR
-- [ ] Sincronización en tiempo real
-
-## 🐛 Solución de Problemas
-
-### Error de Dependencias
 ```bash
-flutter clean
-flutter pub get
-```
-
-### Error de Compilación
-```bash
-flutter doctor
+# Analizar el código
 flutter analyze
+
+# Ejecutar tests
+flutter test
+
+# Construir para web
+flutter build web
+
+# Construir para Android
+flutter build apk
+
+# Limpiar cache
+flutter clean
 ```
 
-### Problemas de Rendimiento
-- Verificar que el dispositivo tenga suficiente memoria
-- Usar `flutter run --profile` para testing de rendimiento
+### Estructura de Widgets
 
-## 📝 Scripts Disponibles
+Los widgets están organizados por funcionalidad:
 
-- `flutter run` - Ejecutar en modo debug
-- `flutter run --release` - Ejecutar en modo release
-- `flutter build web` - Construir para web
-- `flutter build apk` - Construir APK para Android
-- `flutter build ios` - Construir para iOS
+- **Menús**: `top_menu.dart`, `side_menu.dart`, `mobile_menu.dart`
+- **Funcionalidades**: `billing_system_widget.dart`, `employee_search_widget.dart`, etc.
+- **Servicios**: `api_service.dart`, `export_service.dart`, `reportes_service.dart`
 
-## 🤝 Contribución
+## Contribución
 
 1. Fork el proyecto
-2. Crear una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
 3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
 4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abrir un Pull Request
+5. Abre un Pull Request
 
-## 📄 Licencia
+## Licencia
 
 Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
-## 📞 Contacto
+## Soporte
 
-- **Empresa**: NutriPlan
-- **Email**: info@nutriplan.com
-- **Proyecto**: [https://github.com/nutriplan/frontend-app](https://github.com/nutriplan/frontend-app)
+Para soporte técnico o preguntas sobre el proyecto, contacta al equipo de desarrollo.
 
 ---
 
-**Nota**: Esta aplicación está diseñada para funcionar en conjunto con el backend de NutriPlan.
+**NutriPlan** - Sistema de Gestión de Comedor Empresarial

@@ -9,7 +9,6 @@ import '../widgets/billing_system_widget.dart';
 import '../widgets/employee_search_widget.dart';
 import '../widgets/reports_widget.dart';
 import '../widgets/update_info_widget.dart';
-import '../services/api_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,69 +18,53 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String _selectedMenuItem = 'Inicio';
-  String _selectedSideMenuItem = '';
-
-  void _onTopMenuItemSelected(String item) {
-    setState(() {
-      _selectedMenuItem = item;
-      _selectedSideMenuItem = '';
-    });
-  }
-
-  void _onSideMenuItemSelected(String item) {
-    setState(() {
-      _selectedSideMenuItem = item;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  String _selectedTopMenuItem = 'Productos';
+  String _selectedSideMenuItem = 'Sistema de Facturación';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('NutriPlan - Sistema de Gestión'),
-        actions: [
-          // Menú hamburguesa para móvil
-          if (MediaQuery.of(context).size.width < 768)
-            IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-            ),
-        ],
+        title: const Text('NutriPlan'),
+        backgroundColor: Colors.purple,
+        foregroundColor: Colors.white,
+        elevation: 2,
+      ),
+      drawer: MobileMenu(
+        selectedTopItem: _selectedTopMenuItem,
+        selectedSideItem: _selectedSideMenuItem,
+        onTopItemSelected: (item) {
+          setState(() {
+            _selectedTopMenuItem = item;
+          });
+        },
+        onSideItemSelected: (item) {
+          setState(() {
+            _selectedSideMenuItem = item;
+          });
+        },
       ),
       body: ResponsiveLayout(
         mobile: _buildMobileLayout(),
         tablet: _buildTabletLayout(),
         desktop: _buildDesktopLayout(),
       ),
-      endDrawer: MediaQuery.of(context).size.width < 768
-          ? MobileMenu(
-              selectedTopItem: _selectedMenuItem,
-              selectedSideItem: _selectedSideMenuItem,
-              onTopItemSelected: _onTopMenuItemSelected,
-              onSideItemSelected: _onSideMenuItemSelected,
-            )
-          : null,
     );
   }
 
   Widget _buildMobileLayout() {
     return Column(
       children: [
-        // Menú superior para móvil
         TopMenu(
-          selectedItem: _selectedMenuItem,
-          onItemSelected: _onTopMenuItemSelected,
+          selectedItem: _selectedTopMenuItem,
+          onItemSelected: (item) {
+            setState(() {
+              _selectedTopMenuItem = item;
+            });
+          },
           isMobile: true,
         ),
-        Expanded(child: _buildContent()),
+        Expanded(child: _getTopMenuContent()),
       ],
     );
   }
@@ -89,22 +72,28 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildTabletLayout() {
     return Row(
       children: [
-        // Menú lateral para tablet
         SideMenu(
           selectedItem: _selectedSideMenuItem,
-          onItemSelected: _onSideMenuItemSelected,
+          onItemSelected: (item) {
+            setState(() {
+              _selectedSideMenuItem = item;
+            });
+          },
           isTablet: true,
         ),
         Expanded(
           child: Column(
             children: [
-              // Menú superior
               TopMenu(
-                selectedItem: _selectedMenuItem,
-                onItemSelected: _onTopMenuItemSelected,
+                selectedItem: _selectedTopMenuItem,
+                onItemSelected: (item) {
+                  setState(() {
+                    _selectedTopMenuItem = item;
+                  });
+                },
                 isMobile: false,
               ),
-              Expanded(child: _buildContent()),
+              Expanded(child: _getTopMenuContent()),
             ],
           ),
         ),
@@ -115,22 +104,28 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildDesktopLayout() {
     return Row(
       children: [
-        // Menú lateral para desktop
         SideMenu(
           selectedItem: _selectedSideMenuItem,
-          onItemSelected: _onSideMenuItemSelected,
+          onItemSelected: (item) {
+            setState(() {
+              _selectedSideMenuItem = item;
+            });
+          },
           isTablet: false,
         ),
         Expanded(
           child: Column(
             children: [
-              // Menú superior
               TopMenu(
-                selectedItem: _selectedMenuItem,
-                onItemSelected: _onTopMenuItemSelected,
+                selectedItem: _selectedTopMenuItem,
+                onItemSelected: (item) {
+                  setState(() {
+                    _selectedTopMenuItem = item;
+                  });
+                },
                 isMobile: false,
               ),
-              Expanded(child: _buildContent()),
+              Expanded(child: _getTopMenuContent()),
             ],
           ),
         ),
@@ -138,25 +133,19 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildContent() {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      child: _getContentForSelectedItem(),
-    );
-  }
-
-  Widget _getContentForSelectedItem() {
-    if (_selectedSideMenuItem.isNotEmpty) {
-      return _getSideMenuContent();
-    }
-
-    switch (_selectedMenuItem) {
+  Widget _getTopMenuContent() {
+    switch (_selectedTopMenuItem) {
       case 'Productos':
-        return _buildProductsContent();
+        return ProductsWidget(
+          onRecordSaved: () {
+            // Callback para cuando se guarda un registro
+            // Esto se puede usar para actualizar otros widgets si es necesario
+          },
+        );
       case 'Últimos Movimientos':
-        return _buildRecentMovements();
+        return const RecentMovementsWidget();
       default:
-        return _buildWelcomeContent();
+        return _getSideMenuContent();
     }
   }
 
@@ -176,40 +165,111 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildWelcomeContent() {
-    return Center(
+    return Container(
+      padding: const EdgeInsets.all(24.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.restaurant_menu, size: 80, color: Colors.blue[400]),
-          const SizedBox(height: 24),
-          Text(
-            'Bienvenido al Sistema de Gestión NutriPlan',
-            style: Theme.of(context).textTheme.headlineSmall,
-            textAlign: TextAlign.center,
+          Row(
+            children: [
+              Icon(Icons.restaurant, size: 48, color: Colors.purple),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Bienvenido a NutriPlan',
+                      style: Theme.of(context).textTheme.headlineMedium
+                          ?.copyWith(
+                            color: Colors.purple,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Sistema de Gestión de Comedor Empresarial',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
-          Text(
-            'Selecciona "Productos" del menú superior para registrar movimientos\n'
-            'o del menú lateral para consultas y reportes',
-            style: Theme.of(context).textTheme.bodyLarge,
-            textAlign: TextAlign.center,
+          const SizedBox(height: 32),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Funcionalidades Principales',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: Colors.purple,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  _buildFeatureItem(
+                    Icons.point_of_sale,
+                    'Sistema de Facturación',
+                    'Registra y gestiona las ventas del comedor',
+                  ),
+                  _buildFeatureItem(
+                    Icons.person_search,
+                    'Búsqueda de Empleados',
+                    'Consulta información de empleados en tiempo real',
+                  ),
+                  _buildFeatureItem(
+                    Icons.assessment,
+                    'Generación de Reportes',
+                    'Crea reportes detallados de ventas y consumo',
+                  ),
+                  _buildFeatureItem(
+                    Icons.update,
+                    'Actualización de Información',
+                    'Mantén actualizada la información del sistema',
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildProductsContent() {
-    return ProductsWidget(
-      onRecordSaved: () {
-        // Callback para cuando se guarda un registro
-        // Esto se puede usar para actualizar otros widgets si es necesario
-      },
+  Widget _buildFeatureItem(IconData icon, String title, String description) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.purple, size: 24),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  description,
+                  style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
-  }
-
-  Widget _buildRecentMovements() {
-    return const RecentMovementsWidget();
   }
 
   Widget _buildBillingSystem() {

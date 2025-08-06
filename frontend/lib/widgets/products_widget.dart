@@ -12,9 +12,9 @@ class ProductsWidget extends StatefulWidget {
 
 class _ProductsWidgetState extends State<ProductsWidget> {
   // Variables para el formulario de productos
-  List<String> _tiposProductos = [];
+  List<Map<String, dynamic>> _tiposProductos = [];
   bool _isLoadingTipos = false;
-  String? _selectedTipoProducto;
+  Map<String, dynamic>? _selectedTipoProducto;
   final TextEditingController _codigoEmpleadoController =
       TextEditingController();
   final TextEditingController _cantidadController = TextEditingController();
@@ -216,6 +216,9 @@ class _ProductsWidgetState extends State<ProductsWidget> {
 
     try {
       // Preparar datos de la factura según la estructura exacta que espera el backend
+
+      print(_tiposProductos);
+
       final facturaData = {
         'fac_cab_codigo':
             DateTime.now().millisecondsSinceEpoch, // Código único de factura
@@ -231,8 +234,10 @@ class _ProductsWidgetState extends State<ProductsWidget> {
         'fac_cab_cantidad': cantidad,
         'fac_cab_descuento': 0, // Descuento por defecto
         'fac_cab_precio_empleado': 1, // Precio por defecto
-        'producto_prd_codigo': 1, // Código de producto por defecto
-        'producto_nombre': _selectedTipoProducto,
+        'producto_prd_codigo':
+            _selectedTipoProducto?['codigo'] ??
+            1, // Código del producto seleccionado
+        'producto_nombre': _selectedTipoProducto?['nombre'] ?? '',
       };
 
       print('📋 Datos de factura a enviar: $facturaData');
@@ -245,7 +250,7 @@ class _ProductsWidgetState extends State<ProductsWidget> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              '✅ Registro guardado exitosamente: ${_selectedTipoProducto}',
+              '✅ Registro guardado exitosamente: ${_selectedTipoProducto?['nombre'] ?? 'Producto'}',
             ),
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 3),
@@ -425,7 +430,7 @@ class _ProductsWidgetState extends State<ProductsWidget> {
                   ],
                 ),
               )
-            : DropdownButtonFormField<String>(
+            : DropdownButtonFormField<Map<String, dynamic>>(
                 decoration: const InputDecoration(
                   labelText: 'Tipo de Producto',
                   border: OutlineInputBorder(),
@@ -433,7 +438,10 @@ class _ProductsWidgetState extends State<ProductsWidget> {
                 ),
                 value: _selectedTipoProducto,
                 items: _tiposProductos.map((tipo) {
-                  return DropdownMenuItem(value: tipo, child: Text(tipo));
+                  return DropdownMenuItem(
+                    value: tipo,
+                    child: Text(tipo['nombre'] as String),
+                  );
                 }).toList(),
                 onChanged: (value) {
                   setState(() {

@@ -37,6 +37,22 @@ dependencies:
   
   # HTTP client for API calls
   http: ^1.1.0
+  
+  # PlutoGrid for data tables
+  pluto_grid: ^8.0.0
+  
+  # Excel export
+  excel: ^2.1.0
+  
+  # PDF export
+  pdf: ^3.10.7
+  path_provider: ^2.1.2
+  
+  # File picker for saving files
+  file_picker: ^6.1.1
+  
+  # Date picker
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:

@@ -13,6 +13,7 @@ const productosRoutes = require('./routes/productos');
 const facturasRoutes = require('./routes/facturas');
 const reportesRoutes = require('./routes/reportes');
 const biometricosRoutes = require('./routes/biometricos');
+const reportesFacturasRoutes = require('./routes/reportes_facturas');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -52,7 +53,8 @@ app.get('/', (req, res) => {
       productos: '/api/productos',
       facturas: '/api/facturas',
       reportes: '/api/reportes',
-      biometricos: '/api/biometricos'
+      biometricos: '/api/biometricos',
+      reportesFacturas: '/api/reportes-facturas'
     }
   });
 });
@@ -82,6 +84,7 @@ app.use('/api/productos', productosRoutes);
 app.use('/api/facturas', facturasRoutes);
 app.use('/api/reportes', reportesRoutes);
 app.use('/api/biometricos', biometricosRoutes);
+app.use('/api/reportes-facturas', reportesFacturasRoutes);
 
 // Middleware de manejo de errores
 app.use(errorHandler);
@@ -99,7 +102,9 @@ app.use('*', (req, res) => {
       'GET /api/productos',
       'GET /api/facturas',
       'GET /api/reportes',
-      'GET /api/biometricos'
+      'GET /api/biometricos',
+      'GET /api/reportes-facturas/rango-fechas',
+      'GET /api/reportes-facturas/empleado/:codigo'
     ]
   });
 });

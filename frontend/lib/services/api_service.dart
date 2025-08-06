@@ -77,18 +77,28 @@ class ApiService {
     }
   }
 
-  // Obtener tipos únicos de productos (basado en prd_nombre)
-  static Future<List<String>> getTiposProductos() async {
+  // Obtener tipos únicos de productos con nombre y código
+  static Future<List<Map<String, dynamic>>> getTiposProductos() async {
     try {
       final productos = await getProductos();
       final tipos = productos
-          .map((producto) => producto['prd_nombre'] as String)
-          .where((nombre) => nombre.isNotEmpty)
-          .toSet()
+          .where(
+            (producto) =>
+                producto['prd_nombre'] != null &&
+                producto['prd_nombre'].toString().isNotEmpty,
+          )
+          .map(
+            (producto) => {
+              'nombre': producto['prd_nombre'] as String,
+              'codigo': producto['prd_codigo'] as int,
+            },
+          )
           .toList();
 
-      // Ordenar alfabéticamente
-      tipos.sort();
+      // Ordenar alfabéticamente por nombre
+      tipos.sort(
+        (a, b) => (a['nombre'] as String).compareTo(b['nombre'] as String),
+      );
       return tipos;
     } catch (e) {
       throw Exception('Error al obtener tipos de productos: $e');
